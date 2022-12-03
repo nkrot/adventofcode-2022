@@ -16,8 +16,8 @@ DAY = '03'
 DEBUG = int(os.environ.get('DEBUG', 0))
 
 alphabet = [
-    * [chr(cp) for cp in range(ord('a'), 1+ord('z'))],
-    * [chr(cp) for cp in range(ord('A'), 1+ord('Z'))]
+    * map(chr, range(ord('a'), 1+ord('z'))),
+    * map(chr, range(ord('A'), 1+ord('Z')))
 ]
 
 PRIORITIES = {char: 1+idx for idx, char in enumerate(alphabet)}
@@ -31,12 +31,14 @@ def solve_p1(lines: List[str]) -> int:
         lhs, rhs = ln[0:mid], ln[mid:]
         assert len(lhs) == len(rhs)
         common_items.extend(set(lhs) & set(rhs))
-    return sum(PRIORITIES[item] for item in common_items)
+    # score = sum(PRIORITIES[item] for item in common_items)
+    score = sum(map(PRIORITIES.get, common_items))
+    return score
 
 
 def solve_p2(lines: List[str]) -> int:
     """Solution to the 2nd part of the challenge"""
-    badges = []
+    res = 0
     grp_size = 3
     for i in range(0, len(lines), grp_size):
         common_items = reduce(
@@ -45,8 +47,8 @@ def solve_p2(lines: List[str]) -> int:
             set(lines[i])
         )
         assert len(common_items) == 1
-        badges.extend(common_items)
-    return sum(PRIORITIES[item] for item in badges)
+        res += PRIORITIES[common_items.pop()]
+    return res
 
 
 tests = [
