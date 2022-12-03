@@ -36,16 +36,27 @@ def solve_p1(lines: List[str]) -> int:
     return score
 
 
-def solve_p2(lines: List[str]) -> int:
+def solve_p2_v1(lines: List[str]) -> int:
     """Solution to the 2nd part of the challenge"""
     res = 0
     grp_size = 3
     for i in range(0, len(lines), grp_size):
         common_items = reduce(
-            lambda a, b: a & set(b),
-            lines[i+1:i+grp_size],
-            set(lines[i])
+            lambda a, b: set(a) & set(b),
+            lines[i:i+grp_size]
         )
+        assert len(common_items) == 1
+        res += PRIORITIES[common_items.pop()]
+    return res
+
+
+def solve_p2(lines: List[str]) -> int:
+    """Solution to the 2nd part of the challenge"""
+    res = 0
+    grp_size = 3
+    for i in range(0, len(lines), grp_size):
+        rucksacks = map(set, lines[i:i+grp_size])
+        common_items = set.intersection(*rucksacks)
         assert len(common_items) == 1
         res += PRIORITIES[common_items.pop()]
     return res
