@@ -1,8 +1,8 @@
 
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Tuple, Optional, Callable
 
 
-def load_input(fname: Optional[str] = None) -> List[str]:
+def load_input(fname: Optional[str] = None, **kwargs) -> List[str]:
     """Load file, either given or default 'input.txt' and return its content
     as a list of lines. All lines are returned, including empty ones."""
     fname = fname or 'input.txt'
@@ -10,6 +10,9 @@ def load_input(fname: Optional[str] = None) -> List[str]:
     with open(fname) as fd:
         for line in fd:
             lines.append(line.rstrip('\r\n'))
+    parser = kwargs.get("line_parser")
+    if parser:
+        lines = list(map(parser, lines))
     return lines
 
 
@@ -75,3 +78,37 @@ def mytimeit(func, n=1):
         print("Runtime[{}]: {} nsec".format(func.__name__, end-start))
         return res
     return wrapper
+
+
+def run_tests(
+    day: str,
+    tests: List[Tuple], # (input, expected-part-1, expected-part-2)
+    solve_p1: Callable = None,
+    solve_p2: Callable = None
+):
+    print(f"--- Tests day {day} ---")
+
+    for tid, (inp, exp1, exp2) in enumerate(tests):
+        if solve_p1 and exp1 is not None:
+            res1 = solve_p1(inp)
+            print(f"T.{tid}.p1:", res1 == exp1, exp1, res1)
+
+        if solve_p2 and exp2 is not None:
+            res2 = solve_p2(inp)
+            print(f"T.{tid}.p2:", res2 == exp2, exp2, res2)
+
+
+def run_real(
+    day: str,
+    tests: List[Tuple], # (input, expected-part-1, expected-part-2)
+    solve_p1: Callable = None,
+    solve_p2: Callable = None
+):
+    for tid, (inp, exp1, exp2) in enumerate(tests):
+        print(f"--- Day {day} p.1 ---")
+        res1 = solve_p1(inp)
+        print(exp1 == res1, exp1, res1)
+
+        print(f"--- Day {day} p.2 ---")
+        res2 = solve_p2(inp)
+        print(exp2 == res2, exp2, res2)
