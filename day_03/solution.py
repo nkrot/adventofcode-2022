@@ -66,34 +66,11 @@ tests = [
     (utils.load_input('test.1.txt'), 157, 70),
 ]
 
-
-def run_tests():
-    print("--- Tests ---")
-
-    for tid, (inp, exp1, exp2) in enumerate(tests):
-        if exp1 is not None:
-            res1 = solve_p1(inp)
-            print(f"T.{tid}.p1:", res1 == exp1, exp1, res1)
-
-        if exp2 is not None:
-            res2 = solve_p2(inp)
-            print(f"T.{tid}.p2:", res2 == exp2, exp2, res2)
-
-
-def run_real():
-    lines = utils.load_input()
-
-    print(f"--- Day {DAY} p.1 ---")
-    exp1 = 8105
-    res1 = solve_p1(lines)
-    print(exp1 == res1, exp1, res1)
-
-    print(f"--- Day {DAY} p.2 ---")
-    exp2 = 2363
-    res2 = solve_p2(lines)
-    print(exp2 == res2, exp2, res2)
+reals = [
+    (utils.load_input(), 8105, 2363)
+]
 
 
 if __name__ == '__main__':
-    run_tests()
-    run_real()
+    utils.run_tests(DAY, tests, solve_p1, solve_p2)
+    utils.run_real(DAY, reals, solve_p1, solve_p2)
