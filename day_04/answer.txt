@@ -1,0 +1,7 @@
+--- Tests ---
+T.0.p1: True 2 2
+T.0.p2: True 4 4
+--- Day 04 p.1 ---
+True 550 550
+--- Day 04 p.2 ---
+True 931 931

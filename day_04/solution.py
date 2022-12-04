@@ -1,38 +1,55 @@
 #!/usr/bin/env python
 
 # # #
-# template script
-# 1) copy it under a day-related directory
-# 2) fill in TODOs
+#
 #
 
 import re
 import os
 import sys
-from typing import List
+from typing import List, Tuple, Callable
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from aoc import utils
 
-DAY = 'DD'  # TODO
+DAY = '04'
 DEBUG = int(os.environ.get('DEBUG', 0))
+
+
+def parse(line: str) -> List[Tuple[int, int]]:
+    m = re.match(r'(\d+)-(\d+),(\d+)-(\d+)$', line)
+    return [
+        (int(m[1]), int(m[2])),
+        (int(m[3]), int(m[4]))
+    ]
+
+
+def is_contained(ts) -> bool:
+    ta, tb = sorted(ts)
+    return ta[1] >= tb[1] or ta[0] == tb[0]
+
+
+def overlap(ts) -> bool:
+    ta, tb = sorted(ts)
+    return ta[0] <= tb[0] <= ta[1]
+
+
+def solve(lines: List[str], evaluate: Callable) -> int:
+    return sum(map(evaluate, map(parse, lines)))
 
 
 def solve_p1(lines: List[str]) -> int:
     """Solution to the 1st part of the challenge"""
-    # TODO
-    return 0
+    return solve(lines, is_contained)
 
 
 def solve_p2(lines: List[str]) -> int:
     """Solution to the 2nd part of the challenge"""
-    # TODO
-    return 0
+    return solve(lines, overlap)
 
 
 tests = [
-    # (utils.load_input('test.1.txt'), exp1, None),
-    # TODO
+    (utils.load_input('test.1.txt'), 2, 4),
 ]
 
 
@@ -53,16 +70,16 @@ def run_real():
     lines = utils.load_input()
 
     print(f"--- Day {DAY} p.1 ---")
-    exp1 = -1
+    exp1 = 550
     res1 = solve_p1(lines)
     print(exp1 == res1, exp1, res1)
 
     print(f"--- Day {DAY} p.2 ---")
-    exp2 = -1
+    exp2 = 931
     res2 = solve_p2(lines)
     print(exp2 == res2, exp2, res2)
 
 
 if __name__ == '__main__':
     run_tests()
-    # run_real()
+    run_real()
