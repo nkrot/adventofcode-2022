@@ -1,4 +1,4 @@
---- Tests ---
+--- Tests day 02 ---
 T.0.p1: True 15 15
 T.0.p2: True 12 12
 --- Day 02 p.1 ---
