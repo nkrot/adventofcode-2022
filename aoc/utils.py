@@ -1,4 +1,5 @@
 
+from copy import deepcopy
 from typing import List, Union, Tuple, Optional, Callable
 
 
@@ -93,7 +94,7 @@ def run_tests(
 
     for tid, (inp, exp1, exp2) in enumerate(tests):
         if solve_p1 and exp1 is not None:
-            res1 = solve_p1(inp)
+            res1 = solve_p1(deepcopy(inp))
             print(f"T.{tid}.p1:", res1 == exp1, exp1, res1)
 
         if solve_p2 and exp2 is not None:
@@ -109,7 +110,7 @@ def run_real(
 ):
     for tid, (inp, exp1, exp2) in enumerate(tests):
         print(f"--- Day {day} p.1 ---")
-        res1 = solve_p1(inp)
+        res1 = solve_p1(deepcopy(inp))
         print(exp1 == res1, exp1, res1)
 
         print(f"--- Day {day} p.2 ---")
