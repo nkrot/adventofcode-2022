@@ -1,0 +1,7 @@
+--- Tests day 05 ---
+T.0.p1: True CMZ CMZ
+T.0.p2: True MCD MCD
+--- Day 05 p.1 ---
+True TPGVQPFDH TPGVQPFDH
+--- Day 05 p.2 ---
+True DMRDFRHHH DMRDFRHHH
