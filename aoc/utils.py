@@ -10,9 +10,12 @@ def load_input(fname: Optional[str] = None, **kwargs) -> List[str]:
     with open(fname) as fd:
         for line in fd:
             lines.append(line.rstrip('\r\n'))
-    parser = kwargs.get("line_parser")
-    if parser:
-        lines = list(map(parser, lines))
+    parse_line = kwargs.get("line_parser")
+    if parse_line:
+        lines = list(map(parse_line, lines))
+    parse = kwargs.get("parser")
+    if parse:
+        lines = parse(lines)
     return lines
 
 
