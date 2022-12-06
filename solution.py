@@ -17,7 +17,7 @@ DEBUG = int(os.environ.get('DEBUG', 0))
 
 
 def parse(line: str) -> str:
-    """Parse a line of input into suitable data stricture:
+    """Parse a line of input into suitable data structure:
     """
     # TODO: implement or delete if no transformation is needed
     return line
