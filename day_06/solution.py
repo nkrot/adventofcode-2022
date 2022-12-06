@@ -22,9 +22,8 @@ def parse(lines: List[str]) -> str:
 
 def solve_p1(line: str, size=4) -> int:
     """Solution to the 1st part of the challenge"""
-    for st in range(0, len(line)-size+1):
-        end = st+size
-        chars = set(line[st:end])
+    for end in range(size, len(line)+1):
+        chars = set(line[end-size:end])
         if len(chars) == size:
             return end
     return -1
@@ -33,6 +32,17 @@ def solve_p1(line: str, size=4) -> int:
 def solve_p2(line: str) -> int:
     """Solution to the 2nd part of the challenge"""
     return solve_p1(line, 14)
+
+
+def solve_p1_v2(line: str):
+    chars = []
+    i = 0
+    while len(chars) < 4:
+        if line[i] in chars:
+            del chars[:chars.index(line[i])+1]
+        chars.append(line[i])
+        i+=1
+    return i
 
 
 tests = [
@@ -50,5 +60,5 @@ reals = [
 
 
 if __name__ == '__main__':
-    utils.run_tests(DAY, tests, solve_p1, solve_p2)
-    utils.run_real(DAY, reals, solve_p1, solve_p2)
+    utils.run_tests(DAY, tests, solve_p1_v2, solve_p2)
+    utils.run_real(DAY, reals, solve_p1_v2, solve_p2)
