@@ -1,4 +1,6 @@
 
+import itertools
+import functools
 from copy import deepcopy
 from typing import List, Union, Tuple, Optional, Callable
 
@@ -82,6 +84,32 @@ def mytimeit(func, n=1):
         print("Runtime[{}]: {} nsec".format(func.__name__, end-start))
         return res
     return wrapper
+
+def mdrange_my(*ranges):
+    """
+    Generates all combinations (n-tuples)
+    >>> ranges = [(0, 3), (10, 12), (101, 104)]
+    >>> for x,y,z in mdrange(*ranges):
+    >>>   ...
+    """
+    assert ranges, "Cannot be empty"
+    head, tails = ranges[0], ranges[1:]
+    if not tails:
+        for x in range(*head):
+            yield (x,)
+    else:
+        for x in range(*head):
+            for y in mdrange(*tails):
+                yield (x, *y)
+
+
+def mdrange(*ranges):
+    rngs = [rng if isinstance(rng, range) else range(*rng) for rng in ranges]
+    yield from itertools.product(*rngs)
+
+
+def prod(numbers: List[int]):
+    return functools.reduce(lambda a, b: a*b, numbers, 1)
 
 
 def run_tests(
