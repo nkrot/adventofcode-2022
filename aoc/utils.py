@@ -2,7 +2,7 @@
 import itertools
 import functools
 from copy import deepcopy
-from typing import List, Union, Tuple, Optional, Callable, Iterable
+from typing import List, Union, Tuple, Optional, Callable, Iterable, Any
 
 
 def load_input(fname: Optional[str] = None, **kwargs) -> List[str]:
@@ -20,6 +20,11 @@ def load_input(fname: Optional[str] = None, **kwargs) -> List[str]:
     if parse:
         lines = parse(lines)
     return lines
+
+
+def text_from(fpath: str):
+    with open(fpath) as fd:
+        return fd.read().strip("\n")
 
 
 def group_lines(data: Union[str, List[str]]) -> List[List[str]]:
@@ -111,6 +116,28 @@ def mdrange(*ranges):
 def prod(numbers: List[int]):
     return functools.reduce(lambda a, b: a*b, numbers, 1)
 
+def listfold(lst: List[Any], width: int) -> List[List[Any]]:
+    """Folds (reshapes) a list into 2 dimentional matrix by folding at
+    given position `width`. each row will contain at most `width` items
+    """
+    reshaped = []
+    for ridx in range(len(lst) // width):
+        start = ridx * width
+        reshaped.append(lst[start:start+width])
+    return reshaped
+
+def test2str(success, expected, actual):
+    lines = []
+    if "\n" in str(expected) or "\n" in str(actual):
+        lines.append(str(success))
+        if success:
+            lines += ["Expected and Actual:", str(expected)]
+        else:
+            lines += ["Expected:", str(expected), "Actual:", str(actual)]
+    else:
+        lines.append(f"{success} {expected} {actual}")
+    return "\n".join(lines)
+
 
 def run_tests(
     day: str,
@@ -123,11 +150,11 @@ def run_tests(
     for tid, (inp, exp1, exp2) in enumerate(tests):
         if solve_p1 and exp1 is not None:
             res1 = solve_p1(deepcopy(inp))
-            print(f"T.{tid}.p1:", res1 == exp1, exp1, res1)
+            print(f"T.{tid}.p1:", test2str(res1 == exp1, exp1, res1))
 
         if solve_p2 and exp2 is not None:
             res2 = solve_p2(inp)
-            print(f"T.{tid}.p2:", res2 == exp2, exp2, res2)
+            print(f"T.{tid}.p2:", test2str(res2 == exp2, exp2, res2))
 
 
 def run_real(
@@ -139,11 +166,11 @@ def run_real(
     for tid, (inp, exp1, exp2) in enumerate(tests):
         print(f"--- Day {day} p.1 ---")
         res1 = solve_p1(deepcopy(inp))
-        print(exp1 == res1, exp1, res1)
+        print(test2str(exp1 == res1, exp1, res1))
 
         print(f"--- Day {day} p.2 ---")
         res2 = solve_p2(inp)
-        print(exp2 == res2, exp2, res2)
+        print(test2str(exp2 == res2, exp2, res2))
 
 
 class Vector(object):
