@@ -1,0 +1,8 @@
+--- Tests day 09 ---
+T.0.p1: True 13 13
+T.0.p2: True 1 1
+T.1.p2: True 36 36
+--- Day 09 p.1 ---
+True 5695 5695
+--- Day 09 p.2 ---
+True 2434 2434

@@ -2,7 +2,7 @@
 import itertools
 import functools
 from copy import deepcopy
-from typing import List, Union, Tuple, Optional, Callable
+from typing import List, Union, Tuple, Optional, Callable, Iterable
 
 
 def load_input(fname: Optional[str] = None, **kwargs) -> List[str]:
@@ -144,3 +144,45 @@ def run_real(
         print(f"--- Day {day} p.2 ---")
         res2 = solve_p2(inp)
         print(exp2 == res2, exp2, res2)
+
+
+class Vector(object):
+
+    def __init__(self, values: Iterable = None):
+        self.values = list(values or [])
+
+    def __add__(self, other: Union["Vector", Iterable]) -> "Vector":
+        return self.pairwise(other, lambda a, b: a+b)
+
+    def __sub__(self, other: Union["Vector", Iterable]) -> "Vector":
+        return self.pairwise(other, lambda a, b: a-b)
+
+    def pairwise(
+        self,
+        other: Union["Vector", Iterable],
+        func: Callable   # functools.reduce()
+    ) -> "Vector":
+        assert len(self) == len(other), (
+            f"Length mismatch: {len(self)} vs. {len(other)}"
+        )
+        values = [functools.reduce(func, pair) for pair in zip(self, other)]
+        return self.__class__(values)
+
+    # def __getattr__(self, name: str):
+    #     print("method", name, type(name))
+
+    def __abs__(self):
+        # TODO: implement generically via __getattr__
+        return self.__class__(abs(v) for v in self)
+
+    def __len__(self):
+        return len(self.values)
+
+    def __iter__(self):
+        return iter(self.values)
+
+    def __repr__(self):
+        return "<{}: values={}>".format(self.__class__.__name__, self.values)
+
+    def __str__(self):
+        return str(tuple(self.values))
