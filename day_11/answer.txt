@@ -1,0 +1,6 @@
+--- Tests day 11 ---
+T.0.p1: True 10605 10605
+--- Day 11 p.1 ---
+True 118674 118674
+--- Day 11 p.2 ---
+False None 0
