@@ -1,0 +1,4 @@
+day_*/input.txt filter=git-crypt diff=git-crypt
+day_*/task.txt filter=git-crypt diff=git-crypt
+
+.gitattributes !filter !diff
