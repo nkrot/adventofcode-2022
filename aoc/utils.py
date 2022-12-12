@@ -109,12 +109,14 @@ def mdrange_my(*ranges):
 
 
 def mdrange(*ranges):
+    # TODO: add support for mdrange(5, 6) where range(5) and range(6)
     rngs = [rng if isinstance(rng, range) else range(*rng) for rng in ranges]
     yield from itertools.product(*rngs)
 
 
 def prod(numbers: List[int]):
     return functools.reduce(lambda a, b: a*b, numbers, 1)
+
 
 def listfold(lst: List[Any], width: int) -> List[List[Any]]:
     """Folds (reshapes) a list into 2 dimentional matrix by folding at
@@ -125,6 +127,7 @@ def listfold(lst: List[Any], width: int) -> List[List[Any]]:
         start = ridx * width
         reshaped.append(lst[start:start+width])
     return reshaped
+
 
 def test2str(success, expected, actual):
     lines = []
@@ -213,3 +216,46 @@ class Vector(object):
 
     def __str__(self):
         return str(tuple(self.values))
+
+    def __getitem__(self, idx: int):
+        return self.values[idx]
+
+
+class Matrix(object):
+    """Matrix
+
+    Implementing it for fun.
+    Not as good as pandas dataframe
+    """
+    def __init__(self, *args):
+        if len(args) == 1:
+            # from List[List]
+            shape = len(args[0]), len(args[0][0])
+            self.__init__(*shape)
+            self.values = args[0]  # TODO: make a copy of 2 levels
+        elif len(args) > 1:
+            n_rows, n_cols = args[:2]
+            value = args[2] if len(args) > 2 else 0
+            self.values = [[value] * n_cols for _ in range(n_rows)]
+
+    def shape(self):
+        return (len(self.values), len(self.values[0]))
+
+    def __getitem__(self, xy: Tuple[int, int]):
+        n_rows, n_cols = self.shape()
+        x, y = xy
+        if 0 <= x < n_rows and 0 <= y < n_cols:
+            return self.values[x][y]
+        raise IndexError(f"Matrix index {xy} out of range")
+
+    def __setitem__(self, xy: Tuple[int, int], newval: Any):
+        n_rows, n_cols = self.shape()
+        x, y = xy
+        if 0 <= x < n_rows and 0 <= y < n_cols:
+            self.values[x][y] = newval
+        else:
+            raise IndexError(f"Matrix index {xy} out of range")
+
+    def get(self, xy, default = None):
+        # a la dict.get()
+        raise NotImplementedError()

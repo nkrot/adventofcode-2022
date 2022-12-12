@@ -1,0 +1,7 @@
+--- Tests day 12 ---
+T.0.p1: True 31 31
+T.0.p2: True 29 29
+--- Day 12 p.1 ---
+True 330 330
+--- Day 12 p.2 ---
+True 321 321
