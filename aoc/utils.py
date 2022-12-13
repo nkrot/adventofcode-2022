@@ -54,6 +54,11 @@ def minmax(numbers: List[int]) -> Tuple[int, int]:
     """Return min and max values from given list of integers"""
     return (min(numbers), max(numbers))
 
+
+def flatten(items: List[List]) -> List:
+    """Flatten one level"""
+    return [item for subitems in items for item in subitems]
+
 # Source
 # https://stackoverflow.com/questions/55774054/precise-time-in-nano-seconds-for-python-3-6-and-earlier
 
