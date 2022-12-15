@@ -1,0 +1,6 @@
+--- Tests day 14 ---
+T.0.p1: True 24 24
+--- Day 14 p.1 ---
+True 755 755
+--- Day 14 p.2 ---
+False None 0
