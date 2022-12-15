@@ -246,21 +246,31 @@ class Matrix(object):
     def shape(self):
         return (len(self.values), len(self.values[0]))
 
-    def __getitem__(self, xy: Tuple[int, int]):
+    def _is_in_span(self, xy: Tuple[int, int]) -> bool:
+        """Check that given coordinate `xy` exists in the matrix"""
         n_rows, n_cols = self.shape()
         x, y = xy
-        if 0 <= x < n_rows and 0 <= y < n_cols:
+        return 0 <= x < n_rows and 0 <= y < n_cols
+
+    def __getitem__(self, xy: Tuple[int, int]):
+        if self._is_in_span(xy):
+            x, y = xy
             return self.values[x][y]
         raise IndexError(f"Matrix index {xy} out of range")
 
     def __setitem__(self, xy: Tuple[int, int], newval: Any):
-        n_rows, n_cols = self.shape()
-        x, y = xy
-        if 0 <= x < n_rows and 0 <= y < n_cols:
+        if self._is_in_span(xy):
+            x, y = xy
             self.values[x][y] = newval
         else:
             raise IndexError(f"Matrix index {xy} out of range")
 
-    def get(self, xy, default = None):
-        # a la dict.get()
-        raise NotImplementedError()
+    def get(self, xy: Tuple[int, int], default = None):
+        if self._is_in_span(xy):
+            x, y = xy
+            return self.values[x][y]
+        else:
+            return default
+
+    def __str__(self):
+        return "\n".join([str(row) for row in self.values])
