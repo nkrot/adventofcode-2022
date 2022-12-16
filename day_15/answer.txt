@@ -1,0 +1,6 @@
+--- Tests day 15 ---
+T.0.p1: True 26 26
+--- Day 15 p.1 ---
+True 4502208 4502208
+--- Day 15 p.2 ---
+False None 0

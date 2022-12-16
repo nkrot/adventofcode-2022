@@ -225,6 +225,9 @@ class Vector(object):
     def __getitem__(self, idx: int):
         return self.values[idx]
 
+    def __eq__(self, other: "Vector"):
+        return tuple(self.values) == tuple(other)
+
 
 class Point(Vector):
     """for purposes of clearer naming"""
@@ -242,6 +245,10 @@ class Point(Vector):
     @property
     def y(self):
         return self[1]
+
+    def l1_dist(self, other: 'Point') -> int:
+        """L1 distance aka Manhattan distance"""
+        return sum(*abs(self - other))
 
     def __lt__(self, other: 'Point'):
         return self.x < other.x or self.x == other.x and self.y < other.y
