@@ -1,4 +1,6 @@
-day_*/input.txt filter=git-crypt diff=git-crypt
-day_*/task.txt filter=git-crypt diff=git-crypt
+# merging requires this tool:
+# https://github.com/krish7919/git-crypt-merge-tool
+day_*/input.txt filter=git-crypt diff=git-crypt merge=git-crypt
+day_*/task.txt filter=git-crypt diff=git-crypt merge=git-crypt
 
 .gitattributes !filter !diff
