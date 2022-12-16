@@ -11,26 +11,12 @@ from typing import List
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from aoc import utils
-from aoc.utils import Vector, Matrix, flatten, mdrange
+from aoc.utils import Matrix, Point, flatten, mdrange
 
 
 DAY = '14'
 DEBUG = int(os.environ.get('DEBUG', 0))
 
-
-class Point(Vector):
-    """for purposes of clearer naming"""
-
-    @property
-    def x(self):
-        return self[0]
-
-    @property
-    def y(self):
-        return self[1]
-
-    def __lt__(self, other: 'Point'):
-        return self.x < other.x or self.x == other.x and self.y < other.y
 
 class Cave(Matrix):
     pass
@@ -39,20 +25,20 @@ class Cave(Matrix):
 def parse_line(line: str) -> List[Point]:
     """Parse a line of input into suitable data structure"""
     points = [
-        Point((int(m[1]), int(m[2])))
+        Point(int(m[1]), int(m[2]))
         for m in re.finditer(r'(\d+),(\d+)', line)
     ]
     return points
 
 
-def parse_lines(points: List[Vector]):
+def parse_lines(points: List[Point]):
     # find the leftmost values of x and y and treats them as origin of
     # the coordinates. This will reduce the matrix size.
-    sand = Point((500, 0))  # where each sand unit starts
+    sand = Point(500, 0)  # where each sand unit starts
     allpoints = flatten(points) + [sand]
     xs = [pt.x for pt in allpoints]
     ys = [pt.y for pt in allpoints]
-    new_origin = Point((min(xs), min(ys)))  # top left corner
+    new_origin = Point(min(xs), min(ys))  # top left corner
 
     # Shift all points w.r.t to the new origin.
     shifted_points = [[pt - new_origin for pt in pts] for pts in points]
@@ -61,7 +47,7 @@ def parse_lines(points: List[Vector]):
     # print("Sandquelle", sand)
 
     # Represent the cave as a matrix
-    last = Point([max(xs), max(ys)]) - new_origin + (1,1)
+    last = Point(max(xs), max(ys)) - new_origin + (1, 1)
     cave = Cave(*last)
 
     # draw the rocks:

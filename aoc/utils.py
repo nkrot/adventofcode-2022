@@ -226,6 +226,27 @@ class Vector(object):
         return self.values[idx]
 
 
+class Point(Vector):
+    """for purposes of clearer naming"""
+
+    def __init__(self, *coords: Union[int, List[int]]):
+        if isinstance(coords[0], (list, tuple)):
+            super().__init__(*coords)
+        else:
+            super().__init__(coords)
+
+    @property
+    def x(self):
+        return self[0]
+
+    @property
+    def y(self):
+        return self[1]
+
+    def __lt__(self, other: 'Point'):
+        return self.x < other.x or self.x == other.x and self.y < other.y
+
+
 class Matrix(object):
     """Matrix
 
