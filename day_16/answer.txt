@@ -1,0 +1,6 @@
+--- Tests day 16 ---
+T.0.p1: True 1651 1651
+--- Day 16 p.1 ---
+True 1559 1559
+--- Day 16 p.2 ---
+False None 0
