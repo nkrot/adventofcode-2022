@@ -233,7 +233,7 @@ class Point(Vector):
     """for purposes of clearer naming"""
 
     def __init__(self, *coords: Union[int, List[int]]):
-        if isinstance(coords[0], (list, tuple)):
+        if isinstance(coords[0], (list, tuple, type(self))):
             super().__init__(*coords)
         else:
             super().__init__(coords)
