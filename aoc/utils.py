@@ -1,8 +1,11 @@
 
+import os
 import itertools
 import functools
 from copy import deepcopy
 from typing import List, Union, Tuple, Optional, Callable, Iterable, Any
+
+DEBUG = int(os.environ.get('DEBUG', 0))
 
 
 def load_input(fname: Optional[str] = None, **kwargs) -> List[str]:
@@ -50,6 +53,10 @@ def to_numbers(lines: List[str]) -> List[int]:
     return [int(line) for line in lines]
 
 
+def dprint(*args):
+    if DEBUG:
+        print(*args)
+
 def minmax(numbers: List[int]) -> Tuple[int, int]:
     """Return min and max values from given list of integers"""
     return (min(numbers), max(numbers))
@@ -94,6 +101,7 @@ def mytimeit(func, n=1):
         print("Runtime[{}]: {} nsec".format(func.__name__, end-start))
         return res
     return wrapper
+
 
 def mdrange_my(*ranges):
     """

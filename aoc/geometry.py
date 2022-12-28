@@ -1,10 +1,11 @@
 
-from typing import Union, Tuple, List, Optional
+from typing import Union, Tuple, List, Optional, Iterable
+from .utils import Point, Matrix
 
 
 class BrokenLine(object):
     """
-    A line segment starting and endint at given positions `start` and `end`.
+    A line segment starting and ending at given positions `start` and `end`.
     Both ends are included.
     It can be continuous or discontinous. The latter consists if a number of
     segments (`parts`), each with its own `start` and `end` values.
@@ -89,3 +90,84 @@ class BrokenLine(object):
     def __repr__(self):
         return "<{}: length={}, parts={}>".format(
             self.__class__.__name__, len(self), self.parts)
+
+
+class Shape(object):
+    """A Shape is a list of points that constitute it
+
+    Assumptions:
+    * a point has coordinates (x, y)
+    * the origin is located in the top left corner
+    * x axis goes from left to right
+    * y axis goes from top to bottom
+    """
+
+    def __init__(self, points: List[Point] = None):
+        self.points: Tuple[Point] = tuple(points or [])
+        self.name: str = ""
+
+    def move(self, offsets: Iterable, times: int = 1) -> "Shape":
+        if times != 1:
+            offsets = [c*times for c in offsets]
+        self.points = tuple(pt + offsets for pt in self.points)
+        return self
+
+    def __iadd__(self, other: "Shape"):
+        """If the shape `other` is in contact with the current shape, merge
+        other shape into the current.
+        """
+        assert self.has_contact_points(other), "Shapes are disjoint"
+        self.points = self.points + tuple(Point(pt) for pt in other.points)
+        # TODO: remove points that are now internal to the current shape?
+        return self
+
+    def has_contact_points(self, other: "Shape") -> bool:
+        for opt in other.points:
+            for pt in self.points:
+                if pt.l1_dist(opt) == 1:
+                    return True
+        return False
+
+    def __contains__(self, point: Point) -> bool:
+        return any(pt == point for pt in self.points)
+
+    def overlaps_with(self, other: "Shape") -> bool:
+        """Detect if the current shape overlaps with other shape"""
+        return any(pt in self for pt in other.points)
+
+    def top(self) -> Point:
+        """Return the topmost point.
+        If there are several, then return the first one.
+        """
+        miny = min(pt.y for pt in self.points)
+        return next(pt for pt in self.points if pt.y == miny)
+
+    def bottom(self) -> Point:
+        """Return the bottommost point.
+        If there are several, then return the first one.
+        """
+        maxy = max(pt.y for pt in self.points)
+        return next(pt for pt in self.points if pt.y == maxy)
+
+    def left(self) -> Point:
+        """Return the leftmost point.
+        If there are several, then return the first one.
+        """
+        minx = min(pt.x for pt in self.points)
+        return next(pt for pt in self.points if pt.x == minx)
+
+    def right(self) -> Point:
+        """Return the rightmost point.
+        If there are several, then return the first one.
+        """
+        maxx = max(pt.x for pt in self.points)
+        return next(pt for pt in self.points if pt.x == maxx)
+
+    def __repr__(self):
+        return "<{}: name='{}' points={}>".format(self.__class__.__name__,
+            self.name, self.points)
+
+    def draw(self, canvas: Matrix):
+        for pt in self.points:
+            xy = (pt.y, pt.x)
+            canvas[xy] = "#"

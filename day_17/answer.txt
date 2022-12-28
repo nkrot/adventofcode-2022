@@ -1,0 +1,7 @@
+--- Tests day 17 ---
+T.0.p1: True 3068 3068
+T.0.p2: False 1514285714288 0
+--- Day 17 p.1 ---
+True 3232 3232
+--- Day 17 p.2 ---
+False None 0
