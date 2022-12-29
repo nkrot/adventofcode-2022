@@ -1,0 +1,7 @@
+--- Tests day 18 ---
+T.0.p1: True 64 64
+T.0.p2: True 58 58
+--- Day 18 p.1 ---
+True 3470 3470
+--- Day 18 p.2 ---
+True 1986 1986
