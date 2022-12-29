@@ -194,6 +194,9 @@ class Vector(object):
     def __init__(self, values: Iterable = None):
         self.values = list(values or [])
 
+    def __hash__(self):
+        return hash(tuple(self.values))
+
     def __add__(self, other: Union["Vector", Iterable]) -> "Vector":
         return self.pairwise(other, lambda a, b: a+b)
 
@@ -253,6 +256,10 @@ class Point(Vector):
     @property
     def y(self):
         return self[1]
+
+    @property
+    def z(self):
+        return self[2]
 
     def l1_dist(self, other: 'Point') -> int:
         """L1 distance aka Manhattan distance"""
