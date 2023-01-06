@@ -35,19 +35,16 @@ class Stree(object):
 
     def __setitem__(self, varname, value: Union["Value", "Expression"]):
         self.variables[varname] = value
-        value.registers = self
+        value.variables = self
 
     def __getitem__(self, varname: str) -> Union["Value", "Expression"]:
         return self.variables[varname]
 
     def find(self, operand: str):
-        """"""
-        for lhs, rhs in self.variables.items():
+        """"Find expression that contains given `operand`"""
+        for rhs in self.variables.values():
             if isinstance(rhs, self.Expression) and operand in rhs.operands:
                 return rhs
-
-    # def __str__(self):
-    #     return "{} = {}".format(self.)
 
     class Expression():
 
@@ -56,24 +53,24 @@ class Stree(object):
             "+": "__add__",
             "/": "__floordiv__",
             "-": "__sub__",
-            "=": "__eq__"
+            # "=": "__eq__"  # interpreted invidually
         }
 
         def __init__(self, op, op1, op2, trgvar):
             self.operator = op
             self.operands = [op1, op2]
             self.target = trgvar
-            self.registers = None
+            self.variables = None  # computer memory
 
         def eval(self) -> int:
             if self.operator == "=":
                 # unary operator
                 op = self.operands[0]
-                return getattr(self.registers[op], "eval")()
+                return getattr(self.variables[op], "eval")()
             else:
                 # binary operators
                 values = [
-                    getattr(self.registers[op], "eval")()
+                    getattr(self.variables[op], "eval")()
                     for op in self.operands
                 ]
                 return getattr(values[0], self.SYMBOLS[self.operator])(values[1])
@@ -82,8 +79,8 @@ class Stree(object):
             return "{} = ({} {} {})".format(self.target, self.operator,
                 *self.operands)
 
-        def transform(self, trgvar):
-            """ Transform current expression to express term `trgvar` from it
+        def extract(self, trgvar):
+            """Transform current expression to express term `trgvar` from it.
             For example, given
                 y = a + x
             extracting `a`, results in
@@ -114,14 +111,14 @@ class Stree(object):
                     "Life sucks for expressing",
                     trgvar, "from", str(self), i
                 )
-            expr.registers = self.registers
+            expr.variables = self.variables
             return expr
 
     class Value():
 
         def __init__(self, value):
             self.value = int(value)
-            self.registers = None
+            self.variables = None
 
         def eval(self):
             return self.value
@@ -141,9 +138,9 @@ def solve_p1(expr: Stree) -> int:
 
 
 def transform(tree, operand):
-    """Extract `operand` to ba root of the tree"""
+    """Extract `operand` to be root of the tree"""
     expr = tree.find(operand)
-    trn = expr.transform(operand)
+    trn = expr.extract(operand)
     # print("Before", expr)
     # print("After ", trn)
     if expr.operator != "=":
